@@ -5,7 +5,7 @@ import cv2 as cv
 
 @logger.catch
 def read_transparent_png(filename):
-    logger.info("Starting reading transparent image...")
+    # logger.info("Starting reading transparent image...")
 
     image_4channel = cv.imread(filename, cv.IMREAD_UNCHANGED)
     alpha_channel = image_4channel[:, :, 3]
@@ -22,7 +22,6 @@ def read_transparent_png(filename):
     base = rgb_channels.astype(np.float32) * alpha_factor
     white = white_background_image.astype(np.float32) * (1 - alpha_factor)
     final_image = base + white
-
-    logger.info("Finished filling transparent white color")
+    # logger.info("Finished filling transparent white color")
 
     return final_image.astype(np.uint8)
