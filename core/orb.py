@@ -1,3 +1,4 @@
+from imgaug import augmenters as iaa
 from core.functional import *
 from loguru import logger
 import numpy as np
@@ -11,7 +12,7 @@ class Featers:
 
     @staticmethod
     def create_detector():
-        detector = cv.ORB_create(nfeatures=2000)
+        detector = cv.ORB_create(nfeatures=500)
 
         return detector
 
@@ -36,13 +37,14 @@ class Featers:
 
         bf = cv.BFMatcher(cv.NORM_HAMMING)
         matches = bf.knnMatch(train_descs, descs, k=2)
-        good = []
+        good = list()
         # apply ratio test to matches of each keypoint
         # idea is if train KP have a matching KP on image, it will be much closer than next closest non-matching KP,
         # otherwise, all KPs will be almost equally far
         for m, n in matches:
             if m.distance < 0.8 * n.distance:
                 good.append([m])
+
         # stop if we didn't find enough matching keypoints
         if len(good) < 0.1 * len(train_kps):
             logger.error("Not enough keypoints", feature="f-strings")
@@ -72,6 +74,11 @@ def test_orb(src_filename, dest_filename):
 
     img = read_transparent_png(src_filename)
     dest = cv.imread(dest_filename)
+
+    img = cv.resize(img, (200, 200))
+    aug = iaa.Resize(256)
+    # positive = aug.augment_image(positive)
+    img = aug.augment_image(img)
 
     train_features = features.get_features(img)
 

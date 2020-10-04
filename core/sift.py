@@ -7,7 +7,8 @@ import argparse
 
 
 class SIFT:
-    def __init__(self, debug=False):
+    def __init__(self, debug=True):
+        figure, self.ax = plt.subplots(1, 2, figsize=(16, 8))
         logger.info("Starting SIFT module")
         self.debug = debug
 
@@ -65,8 +66,6 @@ class SIFT:
         aug = iaa.Resize(256)
         # positive = aug.augment_image(positive)
         logo = aug.augment_image(logo)
-
-        figure, self.ax = plt.subplots(1, 2, figsize=(16, 8))
 
         sift = self.create_detector()
         keypoints_1, descriptors_1, keypoints_2, descriptors_2 = self.sift_detect(sift, logo, positive)
