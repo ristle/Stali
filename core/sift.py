@@ -26,11 +26,11 @@ class SIFT:
 
         # for debugging
         if self.debug:
-            logger.debug("Drawing keypoints 1 {}", keypoints_1)
+            logger.debug("Drawing keypoints 1 {}", len(keypoints_1))
             img_1 = cv.drawKeypoints(logo, keypoints_1, logo)
             self.ax[0].imshow(img_1)
 
-            logger.debug("Drawing keypoints 2 {}", keypoints_2)
+            logger.debug("Drawing keypoints 2 {}", len(keypoints_2))
             img_2 = cv.drawKeypoints(positive, keypoints_2, positive)
             self.ax[1].imshow(img_2)
 
@@ -88,13 +88,14 @@ class SIFT:
 def test_sift(src_filename, dest_filename):
     sift = SIFT()
 
-    img = read_transparent_png(src_filename)
+    img_no_correction = read_transparent_png(src_filename)
+    img = cv.GaussianBlur(img_no_correction, (3, 3), 2)
     dest = cv.imread(dest_filename)
 
-    img = cv.resize(img, (100, 100))
     img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     dest = cv.cvtColor(dest, cv.COLOR_BGR2GRAY)
 
+    dest = cv.GaussianBlur(dest, (7, 7), 4)
     sift.compute(img, dest)
 
 
