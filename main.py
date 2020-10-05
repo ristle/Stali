@@ -5,15 +5,18 @@ if __name__ == "__main__":
     parser.add_argument("--src", default='./data/logo.png', help="path for the object image")
     parser.add_argument("--dest", default='./data/Test2.jpg', help="path for image containing the object")
     parser.add_argument("--method", default="all",
-                        help="Method for finding logo. Types :\n -all\n -orb\n -flann\n -multi_scale\n -matching \n -test_sift")
+                        help="Method for finding logo. Types :\n -all\n -orb\n -flann\n -multi_scale\n -matching \n -test_sift \n -cascade")
     args = parser.parse_args()
 
     if args.method == "all":
+        test_cascade(args.src, args.dest)
         test_orb(args.src, args.dest)
         test_sift(args.src, args.dest)
         test_flann(args.src, args.dest)
         test_multi_scale(args.src, args.dest)
         test_template_matching(args.src, args.dest)
+    elif args.method == "cascade":
+        test_cascade(args.src, args.dest)
     elif args.method == "orb":
         test_orb(args.src, args.dest)
     elif args.method == "flann":
